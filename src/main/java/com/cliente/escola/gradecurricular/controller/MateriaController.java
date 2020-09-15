@@ -2,8 +2,10 @@ package com.cliente.escola.gradecurricular.controller;
 
 import com.cliente.escola.gradecurricular.dto.MateriaDto;
 import com.cliente.escola.gradecurricular.entity.MateriaEntity;
+import com.cliente.escola.gradecurricular.model.Response;
 import com.cliente.escola.gradecurricular.repository.IMateriaRepository;
 import com.cliente.escola.gradecurricular.service.IMateriaService;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,9 @@ import java.util.List;
 @RequestMapping("/materia")
 public class MateriaController {
 
+    private static final String DELETE = "DELETE";
+    private static final String UPDATE = "UPDATE";
+
     private final IMateriaService materiaService;
 
     public MateriaController(IMateriaService materiaService) {
@@ -27,9 +32,13 @@ public class MateriaController {
      * Metodo retorna um List de MateriaEntity
      */
     @GetMapping
-    public ResponseEntity<List<MateriaDto>> listarMaterias() {
-
-        return ResponseEntity.status(HttpStatus.OK).body(this.materiaService.listar());
+    public ResponseEntity<Response<List<MateriaDto>>> listarMaterias() {
+        Response<List<MateriaDto>> response = new Response<>();
+        response.setData(this.materiaService.listar());
+        response.setStatusCode(HttpStatus.OK.value());
+        response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MateriaController.class)
+                .listarMaterias()).withSelfRel());
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
 
@@ -39,9 +48,17 @@ public class MateriaController {
      * @param id id do objeto
      */
     @GetMapping("/{id}")
-    public ResponseEntity<MateriaDto> consultarMateria(@PathVariable Long id) {
-
-        return ResponseEntity.status(HttpStatus.OK).body(this.materiaService.consultar(id));
+    public ResponseEntity<Response<MateriaDto>> consultarMateria(@PathVariable Long id) {
+        Response<MateriaDto> response = new Response<>();
+        response.setData(this.materiaService.consultar(id));
+        response.setStatusCode(HttpStatus.OK.value());
+        response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MateriaController.class)
+                .consultarMateria(id)).withSelfRel());
+        response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MateriaController.class)
+                .excluirMateria(id)).withRel(DELETE));
+        response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(MateriaController.class)
+                .excluirMateria(id)).withRel(UPDATE));
+        return ResponseEntity.status(HttpStatus.OK).body(response);
 
     }
 
