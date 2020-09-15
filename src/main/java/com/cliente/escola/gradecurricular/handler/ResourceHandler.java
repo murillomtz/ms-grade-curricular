@@ -1,10 +1,7 @@
 package com.cliente.escola.gradecurricular.handler;
 
 import com.cliente.escola.gradecurricular.exception.MateriaException;
-import com.cliente.escola.gradecurricular.model.ErrorMapResponse;
-import com.cliente.escola.gradecurricular.model.ErrorMapResponse.ErrorMapResponseBuilder;
-import com.cliente.escola.gradecurricular.model.ErrorResponse;
-import com.cliente.escola.gradecurricular.model.ErrorResponse.ErrorResponseBuilder;
+import com.cliente.escola.gradecurricular.model.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -21,18 +18,18 @@ public class ResourceHandler {
      * Quando chamar a exception MateriaException ele dará esse tratamento
      */
     @ExceptionHandler(MateriaException.class)
-    public ResponseEntity<ErrorResponse> handlerMateriaException(MateriaException m) {
-        ErrorResponseBuilder erro = ErrorResponse.builder();
-        erro.HttpStatus(m.getHttpStatus().value());
-        erro.mensagem(m.getMessage());
-        erro.timeStamp(System.currentTimeMillis());
+    public ResponseEntity<Response<String>> handlerMateriaException(MateriaException m) {
+        Response<String> response = new Response<>();
 
-        return ResponseEntity.status(m.getHttpStatus()).body(erro.build());
+        response.setStatusCode(m.getHttpStatus().value());
+        response.setData(m.getMessage());
+
+        return ResponseEntity.status(m.getHttpStatus()).body(response);
 
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorMapResponse> handlerMethodArgumentNotValidException(MethodArgumentNotValidException m) {
+    public ResponseEntity<Response<Map<String, String>>> handlerMethodArgumentNotValidException(MethodArgumentNotValidException m) {
         Map<String, String> erros = new HashMap<>();
 
         /*Busca erro e salva o fild e a mensagem de erro*/
@@ -42,10 +39,12 @@ public class ResourceHandler {
             erros.put(campo, mensagem);
         });
 
-        ErrorMapResponseBuilder errorMap = ErrorMapResponse.builder();
-        errorMap.erros(erros).httpStatus(HttpStatus.BAD_REQUEST.value())
-                .timeStamp(System.currentTimeMillis());
-        return ResponseEntity.status(HttpStatus.MULTI_STATUS.BAD_REQUEST).body(errorMap.build());
+        Response<Map<String, String>> response = new Response<>();
+
+        response.setStatusCode(HttpStatus.BAD_REQUEST.value());
+        response.setData(erros);
+
+        return ResponseEntity.status(HttpStatus.MULTI_STATUS.BAD_REQUEST).body(response);
 
     }
 
