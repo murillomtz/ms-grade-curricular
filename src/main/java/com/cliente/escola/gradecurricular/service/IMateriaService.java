@@ -15,4 +15,8 @@ public interface IMateriaService {
     public MateriaDto consultar(final Long id);
 
     public Boolean cadastrar(final MateriaDto materia);
+
+    public List<MateriaDto> listarPorHorarioMinimo(int horaMinima);
+
+    public List<MateriaDto> listarPorFrequencia(int frequencia);
 }

@@ -1,5 +1,6 @@
 package com.cliente.escola.gradecurricular.handler;
 
+import com.cliente.escola.gradecurricular.exception.CursoException;
 import com.cliente.escola.gradecurricular.exception.MateriaException;
 import com.cliente.escola.gradecurricular.model.Response;
 import org.springframework.http.HttpStatus;
@@ -45,6 +46,15 @@ public class ResourceHandler {
         response.setData(erros);
 
         return ResponseEntity.status(HttpStatus.MULTI_STATUS.BAD_REQUEST).body(response);
+
+    }
+
+    @ExceptionHandler(CursoException.class)
+    public ResponseEntity<Response<String>> handlerCursoException(CursoException m) {
+        Response<String> response = new Response<>();
+        response.setStatusCode(m.getHttpStatus().value());
+        response.setData(m.getMessage());
+        return ResponseEntity.status(m.getHttpStatus()).body(response);
 
     }
 
