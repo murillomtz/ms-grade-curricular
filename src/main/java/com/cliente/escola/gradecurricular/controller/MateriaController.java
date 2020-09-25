@@ -1,10 +1,8 @@
 package com.cliente.escola.gradecurricular.controller;
 
-import com.cliente.escola.gradecurricular.constante.HyperLinkConstant;
+import com.cliente.escola.gradecurricular.constant.HyperLinkConstant;
 import com.cliente.escola.gradecurricular.dto.MateriaDto;
-import com.cliente.escola.gradecurricular.entity.MateriaEntity;
 import com.cliente.escola.gradecurricular.model.Response;
-import com.cliente.escola.gradecurricular.repository.IMateriaRepository;
 import com.cliente.escola.gradecurricular.service.IMateriaService;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;

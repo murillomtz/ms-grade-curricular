@@ -1,6 +1,6 @@
 package com.cliente.escola.gradecurricular.service;
 
-import com.cliente.escola.gradecurricular.constante.Mensagens;
+import com.cliente.escola.gradecurricular.constant.Mensagens;
 import com.cliente.escola.gradecurricular.entity.CursoEntity;
 import com.cliente.escola.gradecurricular.entity.MateriaEntity;
 import com.cliente.escola.gradecurricular.exception.CursoException;
