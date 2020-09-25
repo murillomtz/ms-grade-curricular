@@ -137,7 +137,7 @@ public class MateriaServiceUnitTest {
 
         Boolean sucesso = this.materiaService.cadastrar(materiaDto);
 
-        Assert.assertTrue(sucesso);
+        assertTrue(sucesso);
 
         Mockito.verify(this.materiaRepository, times(1)).findByCodigo("ILP");
         Mockito.verify(this.materiaRepository, times(1)).save(materiaEntity);
