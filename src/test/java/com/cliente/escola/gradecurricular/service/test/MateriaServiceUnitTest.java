@@ -304,4 +304,60 @@ public class MateriaServiceUnitTest {
      *
      */
 
+    @Test
+    public void testAtualizarThrowException() {
+
+        MateriaDto materiaDto = new MateriaDto();
+        materiaDto.setId(1L);
+        materiaDto.setCodigo("ILP");
+        materiaDto.setFrequencia(1);
+        materiaDto.setHoras(64);
+        materiaDto.setNome("INTRODUCAO A LINGUAGEM DE PROGRAMACAO");
+
+
+        Mockito.when(this.materiaRepository.findById(1L)).thenReturn(Optional.of(materiaEntity));
+        Mockito.when(this.materiaRepository.save(materiaEntity)).thenThrow(IllegalStateException.class);
+
+        MateriaException materiaException;
+
+
+        materiaException = assertThrows(MateriaException.class, () -> {
+            this.materiaService.atualizar(materiaDto);
+        });
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, materiaException.getHttpStatus());
+        assertEquals(MensagensConstant.ERRO_GENERICO.getValor(), materiaException.getMessage());
+
+        Mockito.verify(this.materiaRepository, times(1)).findById(1L);
+        Mockito.verify(this.materiaRepository, times(1)).save(materiaEntity);
+
+
+    }
+
+    @Test
+    public void testExcluirThrowException() {
+
+        Mockito.when(this.materiaRepository.findById(1L)).thenReturn(Optional.of(materiaEntity));
+        //Quando o metodo retorna void
+        Mockito.doThrow(IllegalStateException.class).when(this.materiaRepository).deleteById(1l);
+
+        MateriaException materiaException;
+
+
+        materiaException = assertThrows(MateriaException.class, () -> {
+            this.materiaService.excluir(1l);
+        });
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, materiaException.getHttpStatus());
+        assertEquals(MensagensConstant.ERRO_GENERICO.getValor(), materiaException.getMessage());
+
+        Mockito.verify(this.materiaRepository, times(1)).deleteById(1L);
+        Mockito.verify(this.materiaRepository, times(1)).findById(1L);
+
+
+
+    }
+    /*consulta, cadastro, listagem
+     *
+     * menos exclusçao*/
 }

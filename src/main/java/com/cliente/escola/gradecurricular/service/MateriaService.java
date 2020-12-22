@@ -39,7 +39,7 @@ public class MateriaService implements IMateriaService {
         } catch (MateriaException m) {
             throw m;
         } catch (Exception e) {
-            throw e;
+            throw new MateriaException(MensagensConstant.ERRO_GENERICO.getValor(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -52,7 +52,7 @@ public class MateriaService implements IMateriaService {
         } catch (MateriaException m) {
             throw m;
         } catch (Exception e) {
-            throw e;
+            throw new MateriaException(MensagensConstant.ERRO_GENERICO.getValor(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -115,8 +115,12 @@ public class MateriaService implements IMateriaService {
 
     @Override
     public List<MateriaDto> listarPorHorarioMinimo(int horaMinima) {
-        return this.mapper.map(this.materiaRepository.findByHoraMinima(horaMinima), new TypeToken<List<MateriaDto>>() {
-        }.getType());
+        try {
+            return this.mapper.map(this.materiaRepository.findByHoraMinima(horaMinima), new TypeToken<List<MateriaDto>>() {
+            }.getType());
+        } catch (Exception e) {
+            throw new MateriaException(MensagensConstant.ERRO_GENERICO.getValor(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @Override
@@ -126,9 +130,13 @@ public class MateriaService implements IMateriaService {
     }
 
     private Boolean cadastrarOuAtualizar(MateriaDto materia) {
-        MateriaEntity materiaEnt = this.mapper.map(materia, MateriaEntity.class);
-        this.materiaRepository.save(materiaEnt);
-        return Boolean.TRUE;
+        try {
+            MateriaEntity materiaEnt = this.mapper.map(materia, MateriaEntity.class);
+            this.materiaRepository.save(materiaEnt);
+            return Boolean.TRUE;
+        } catch (Exception e) {
+            throw new MateriaException(MensagensConstant.ERRO_GENERICO.getValor(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }
