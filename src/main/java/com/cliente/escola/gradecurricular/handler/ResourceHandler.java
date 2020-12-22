@@ -22,6 +22,7 @@ public class ResourceHandler {
     public ResponseEntity<Response<String>> handlerMateriaException(MateriaException m) {
         Response<String> response = new Response<>();
 
+
         response.setStatusCode(m.getHttpStatus().value());
         response.setData(m.getMessage());
 
