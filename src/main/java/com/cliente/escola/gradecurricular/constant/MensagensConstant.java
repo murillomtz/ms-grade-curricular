@@ -1,11 +1,11 @@
-package com.cliente.escola.gradecurricular.constante;
+package com.cliente.escola.gradecurricular.constant;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum Mensagens {
+public enum MensagensConstant {
 
     ERRO_GENERICO("Erro interno identificado. Contate o suporte."),
 
