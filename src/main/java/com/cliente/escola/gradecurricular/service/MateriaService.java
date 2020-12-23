@@ -126,8 +126,12 @@ public class MateriaService implements IMateriaService {
 
     @Override
     public List<MateriaDto> listarPorFrequencia(int frequencia) {
-        return this.mapper.map(this.materiaRepository.findByFrequencia(frequencia), new TypeToken<List<MateriaDto>>() {
-        }.getType());
+        try {
+            return this.mapper.map(this.materiaRepository.findByFrequencia(frequencia), new TypeToken<List<MateriaDto>>() {
+            }.getType());
+        } catch (Exception e) {
+            throw new MateriaException(MensagensConstant.ERRO_GENERICO.getValor(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     private Boolean cadastrarOuAtualizar(MateriaDto materia) {
