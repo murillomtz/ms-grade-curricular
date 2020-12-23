@@ -49,9 +49,10 @@ public class CursoService implements ICursoService {
             }
             return this.cadastrarOuAtualizar(cursoModel);
 
-        } catch (CursoException c) {
+        }catch (CursoException c) {
             throw c;
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             throw new CursoException(MensagensConstant.ERRO_GENERICO.getValor(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -64,7 +65,7 @@ public class CursoService implements ICursoService {
         } catch (CursoException c) {
             throw c;
         } catch (Exception e) {
-            throw e;
+            throw new CursoException(MensagensConstant.ERRO_GENERICO.getValor(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -75,9 +76,11 @@ public class CursoService implements ICursoService {
         try {
             CursoEntity curso = this.cursoRepository.findCursoByCodigo(codCurso);
 
+
             if (curso == null) {
                 throw new CursoException(MensagensConstant.ERRO_CURSO_NAO_ENCONTRADO.getValor(), HttpStatus.NOT_FOUND);
             }
+
             return curso;
 
         } catch (CursoException c) {
@@ -90,20 +93,24 @@ public class CursoService implements ICursoService {
     @CachePut(unless = "#result.size()<3")
     @Override
     public List<CursoEntity> listar() {
-        return this.cursoRepository.findAll();
+        try {
+            return this.cursoRepository.findAll();
+        }catch (Exception e) {
+            throw new CursoException(MensagensConstant.ERRO_GENERICO.getValor(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @Override
     public Boolean excluir(Long cursoId) {
         try {
-            if (this.cursoRepository.findById(cursoId).isPresent()) {
+            if(this.cursoRepository.findById(cursoId).isPresent()) {
                 this.cursoRepository.deleteById(cursoId);
                 return Boolean.TRUE;
             }
             throw new CursoException(MensagensConstant.ERRO_CURSO_NAO_ENCONTRADO.getValor(), HttpStatus.NOT_FOUND);
-        } catch (CursoException c) {
+        }catch (CursoException c) {
             throw c;
-        } catch (Exception e) {
+        }catch (Exception e) {
             throw new CursoException(MensagensConstant.ERRO_GENERICO.getValor(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -116,7 +123,7 @@ public class CursoService implements ICursoService {
     private Boolean cadastrarOuAtualizar(CursoModel cursoModel) {
         List<MateriaEntity> listMateriaEntity = new ArrayList<>();
 
-        if (!cursoModel.getMaterias().isEmpty()) {
+        if (cursoModel.getMaterias()!=null && !cursoModel.getMaterias().isEmpty()) {
 
             cursoModel.getMaterias().forEach(materia -> {
                 if (this.materiaRepository.findById(materia).isPresent())
@@ -125,7 +132,7 @@ public class CursoService implements ICursoService {
         }
 
         CursoEntity cursoEntity = new CursoEntity();
-        if (cursoModel.getId() != null) {
+        if(cursoModel.getId()!=null) {
             cursoEntity.setId(cursoModel.getId());
         }
         cursoEntity.setCodigo(cursoModel.getCodCurso());
