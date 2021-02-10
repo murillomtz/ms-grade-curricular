@@ -104,7 +104,7 @@ public class CursoControllerIntegratedTest {
      *
      */
 
-    @Test
+    /*@Test
     public void testListarCursos() {
 
         ResponseEntity<Response<List<CursoEntity>>> cursos = restTemplate.withBasicAuth(USERNAME,PASSWORD).exchange(this.montaUri(""), HttpMethod.GET,
@@ -124,7 +124,7 @@ public class CursoControllerIntegratedTest {
         assertNotNull(curso.getBody().getData());
         assertEquals("ENGENHARIA DA COMPUTACAO", curso.getBody().getData().getNome());
         assertEquals(200, curso.getBody().getStatusCode());
-    }
+    }*/
 
     @Test
     public void testAtualizarCurso() {
