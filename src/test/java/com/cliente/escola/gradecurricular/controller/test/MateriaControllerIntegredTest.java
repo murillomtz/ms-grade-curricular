@@ -27,6 +27,8 @@ import java.util.List;
 @RunWith(JUnitPlatform.class)
 public class MateriaControllerIntegredTest {
 
+    private final String USERNAME= "admin";
+    private final String PASSWORD= "123";
     @LocalServerPort
     private int port;
 
@@ -76,7 +78,7 @@ public class MateriaControllerIntegredTest {
     public void testListarMaterias() {
 
 
-        ResponseEntity<Response<List<MateriaDto>>> materias = restTemplate.exchange("http://localhost:" + this.port +
+        ResponseEntity<Response<List<MateriaDto>>> materias = restTemplate.withBasicAuth(USERNAME,PASSWORD).exchange("http://localhost:" + this.port +
                 "/materia/", HttpMethod.GET, null, new ParameterizedTypeReference<Response<List<MateriaDto>>>() {
         });
 
@@ -90,7 +92,7 @@ public class MateriaControllerIntegredTest {
     @Test
     public void testConsultarMateriasPorHoraMinima() {
 
-        ResponseEntity<Response<List<MateriaDto>>> materias = restTemplate.exchange("http://localhost:" + this.port +
+        ResponseEntity<Response<List<MateriaDto>>> materias = restTemplate.withBasicAuth(USERNAME,PASSWORD).exchange("http://localhost:" + this.port +
                 "/materia/horario-minimo/80", HttpMethod.GET, null, new ParameterizedTypeReference<Response<List<MateriaDto>>>() {
         });
 
@@ -102,7 +104,7 @@ public class MateriaControllerIntegredTest {
 
     @Test
     public void testConsultarMateriasPorFrequencia() {
-        ResponseEntity<Response<List<MateriaDto>>> materias = restTemplate.exchange("http://localhost:" + this.port +
+        ResponseEntity<Response<List<MateriaDto>>> materias = restTemplate.withBasicAuth(USERNAME,PASSWORD).exchange("http://localhost:" + this.port +
                 "/materia/frequencia/1", HttpMethod.GET, null, new ParameterizedTypeReference<Response<List<MateriaDto>>>() {
         });
 
@@ -117,7 +119,7 @@ public class MateriaControllerIntegredTest {
         List<MateriaEntity> materiasList = this.materiaRepository.findAll();
         Long id = materiasList.get(0).getId();
 
-        ResponseEntity<Response<MateriaDto>> materias = restTemplate.exchange("http://localhost:" + this.port +
+        ResponseEntity<Response<MateriaDto>> materias = restTemplate.withBasicAuth(USERNAME,PASSWORD).exchange("http://localhost:" + this.port +
                 "/materia/"+id, HttpMethod.GET, null, new ParameterizedTypeReference<Response<MateriaDto>>() {
         });
 
@@ -139,7 +141,7 @@ public class MateriaControllerIntegredTest {
 
         HttpEntity<MateriaEntity> request = new HttpEntity<>(materia);
 
-        ResponseEntity<Response<Boolean>> materias = restTemplate.exchange(
+        ResponseEntity<Response<Boolean>> materias = restTemplate.withBasicAuth(USERNAME,PASSWORD).exchange(
                 "http://localhost:" + this.port + "/materia/", HttpMethod.PUT, request,
                 new ParameterizedTypeReference<Response<Boolean>>() {
                 });
@@ -162,7 +164,7 @@ public class MateriaControllerIntegredTest {
 
         HttpEntity<MateriaEntity> request = new HttpEntity<>(m4);
 
-        ResponseEntity<Response<Boolean>> materias = restTemplate.exchange(
+        ResponseEntity<Response<Boolean>> materias = restTemplate.withBasicAuth(USERNAME,PASSWORD).exchange(
                 "http://localhost:" + this.port + "/materia/", HttpMethod.POST, request,
                 new ParameterizedTypeReference<Response<Boolean>>() {
                 });
@@ -178,7 +180,7 @@ public class MateriaControllerIntegredTest {
         List<MateriaEntity> materiasList = this.materiaRepository.findAll();
         Long id = materiasList.get(0).getId();
 
-        ResponseEntity<Response<Boolean>> materias = restTemplate.exchange("http://localhost:" + this.port +
+        ResponseEntity<Response<Boolean>> materias = restTemplate.withBasicAuth(USERNAME,PASSWORD).exchange("http://localhost:" + this.port +
                 "/materia/"+id, HttpMethod.DELETE, null, new ParameterizedTypeReference<Response<Boolean>>() {
         });
 
