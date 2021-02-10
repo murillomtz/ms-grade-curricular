@@ -32,6 +32,10 @@ import org.springframework.http.ResponseEntity;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(JUnitPlatform.class)
 public class CursoControllerIntegratedTest {
+
+    private final String USERNAME= "admin";
+    private final String PASSWORD= "123";
+
     @LocalServerPort
     private int port;
 
@@ -103,7 +107,7 @@ public class CursoControllerIntegratedTest {
     @Test
     public void testListarCursos() {
 
-        ResponseEntity<Response<List<CursoEntity>>> cursos = restTemplate.exchange(this.montaUri(""), HttpMethod.GET,
+        ResponseEntity<Response<List<CursoEntity>>> cursos = restTemplate.withBasicAuth(USERNAME,PASSWORD).exchange(this.montaUri(""), HttpMethod.GET,
                 null, new ParameterizedTypeReference<Response<List<CursoEntity>>>() {
                 });
         assertNotNull(cursos.getBody().getData());
@@ -114,7 +118,7 @@ public class CursoControllerIntegratedTest {
     @Test
     public void testConsultarCursoPorCodigo() {
 
-        ResponseEntity<Response<CursoEntity>> curso = restTemplate.exchange(this.montaUri("/ENGC"), HttpMethod.GET,
+        ResponseEntity<Response<CursoEntity>> curso = restTemplate.withBasicAuth(USERNAME,PASSWORD).exchange(this.montaUri("/ENGC"), HttpMethod.GET,
                 null, new ParameterizedTypeReference<Response<CursoEntity>>() {
                 });
         assertNotNull(curso.getBody().getData());
@@ -136,7 +140,7 @@ public class CursoControllerIntegratedTest {
 
         HttpEntity<CursoModel> request = new HttpEntity<>(cursoModel);
 
-        ResponseEntity<Response<Boolean>> curso = restTemplate.exchange(this.montaUri("/"), HttpMethod.PUT, request,
+        ResponseEntity<Response<Boolean>> curso = restTemplate.withBasicAuth(USERNAME,PASSWORD).exchange(this.montaUri("/"), HttpMethod.PUT, request,
                 new ParameterizedTypeReference<Response<Boolean>>() {
                 });
         CursoEntity cursoAtualizado = this.cursoRepository.findCursoByCodigo(cursoEntity.getCodigo());
@@ -162,7 +166,7 @@ public class CursoControllerIntegratedTest {
 
         HttpEntity<CursoModel> request = new HttpEntity<>(cursoModel);
 
-        ResponseEntity<Response<Boolean>> curso = restTemplate.exchange(this.montaUri(""), HttpMethod.POST, request,
+        ResponseEntity<Response<Boolean>> curso = restTemplate.withBasicAuth(USERNAME,PASSWORD).withBasicAuth(USERNAME,PASSWORD).exchange(this.montaUri(""), HttpMethod.POST, request,
                 new ParameterizedTypeReference<Response<Boolean>>() {
                 });
         List<CursoEntity> listCursoAtualizado = this.cursoRepository.findAll();
@@ -178,7 +182,7 @@ public class CursoControllerIntegratedTest {
         List<CursoEntity> materiaList = this.cursoRepository.findAll();
         Long id = materiaList.get(0).getId();
 
-        ResponseEntity<Response<Boolean>> curso = restTemplate.exchange(this.montaUri(id.toString()), HttpMethod.DELETE,
+        ResponseEntity<Response<Boolean>> curso = restTemplate.withBasicAuth(USERNAME,PASSWORD).exchange(this.montaUri(id.toString()), HttpMethod.DELETE,
                 null, new ParameterizedTypeReference<Response<Boolean>>() {
                 });
 

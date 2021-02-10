@@ -1,9 +1,14 @@
 package com.cliente.escola.gradecurricular.controller;
 
+import com.cliente.escola.gradecurricular.config.SwaggerConfig;
 import com.cliente.escola.gradecurricular.entity.CursoEntity;
 import com.cliente.escola.gradecurricular.model.CursoModel;
 import com.cliente.escola.gradecurricular.model.Response;
 import com.cliente.escola.gradecurricular.service.ICursoService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-
+@Api(tags = SwaggerConfig.CURSO)
 @RestController
 @RequestMapping("/curso")
 public class CursoController {
@@ -24,6 +29,12 @@ public class CursoController {
     }
 
 
+    @ApiOperation(value = "Cadastrar um novo curso")
+    @ApiResponses(value = {
+            @ApiResponse(code=201, message = "Entidade criada com sucesso"),
+            @ApiResponse(code=400, message = "Erro na requisição enviada pelo cliente"),
+            @ApiResponse(code=500, message = "Erro interno no serviço."),
+    })
     @PostMapping
     public ResponseEntity<Response<Boolean>> cadastrarCurso(@Valid @RequestBody CursoModel curso) {
 
@@ -40,6 +51,11 @@ public class CursoController {
      * Listar cursos
      */
 
+    @ApiOperation(value = "Listar todos os cursos cadastrados")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Lista de cursos exibida com sucesso"),
+            @ApiResponse(code = 500, message = "Erro interno no serviço"),
+    })
     @GetMapping
     public ResponseEntity<Response<List<CursoEntity>>> listarCurso() {
         Response<List<CursoEntity>> response = new Response<>();
@@ -52,8 +68,14 @@ public class CursoController {
      * Consultar curso por código do curso
      */
 
+    @ApiOperation(value = "Consultar curso por código")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Curso encontrado com sucesso"),
+            @ApiResponse(code = 404, message = "Curso não encontrado"),
+            @ApiResponse(code = 500, message = "Erro interno no serviço"),
+    })
     @GetMapping("/{codCurso}")
-    public ResponseEntity<Response<CursoEntity>> consultarCursoPorMateria(@PathVariable String codCurso) {
+    public ResponseEntity<Response<CursoEntity>> consultarCursoPorCodigo(@PathVariable String codCurso) {
         Response<CursoEntity> response = new Response<>();
         response.setData(this.cursoService.consultarPorCodigo(codCurso));
         response.setStatusCode(HttpStatus.OK.value());
@@ -63,6 +85,13 @@ public class CursoController {
     /*
      * Atualizar curso
      */
+    @ApiOperation(value = "Atualizar um curso")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Curso atualizado com sucesso"),
+            @ApiResponse(code = 400, message = "Erro na requisição enviada pelo cliente"),
+            @ApiResponse(code = 404, message = "Curso não encontrado"),
+            @ApiResponse(code = 500, message = "Erro interno no serviço"),
+    })
     @PutMapping
     public ResponseEntity<Response<Boolean>> atualizarCurso(@Valid @RequestBody CursoModel curso) {
         Response<Boolean> response = new Response<>();
@@ -75,6 +104,12 @@ public class CursoController {
     /*
      * Excluir curso
      */
+    @ApiOperation(value = "Excluir um curso")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Curso excluído com sucesso"),
+            @ApiResponse(code = 404, message = "Curso não encontrado"),
+            @ApiResponse(code = 500, message = "Erro interno no serviço"),
+    })
     @DeleteMapping("/{cursoId}")
     public ResponseEntity<Response<Boolean>> excluirCurso(@PathVariable Long cursoId) {
         Response<Boolean> response = new Response<>();
