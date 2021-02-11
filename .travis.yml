@@ -1,0 +1,9 @@
+language: java
+jdk: "-openjdk11"
+deploy:
+  provider: heroku
+  api_key:
+    secure: e06fa40e-1e3b-4d65-8630-76b4877d1cb4
+app: grade-curricular-mtz
+on:
+  all_branch: true
