@@ -29,7 +29,7 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
     @Bean
     public Docket gradeCurricularApi() {
         return new Docket(DocumentationType.SWAGGER_2).useDefaultResponseMessages(false).groupName("v1").select()
-                .apis(RequestHandlerSelectors.basePackage("com.cliente.escola.gradecurricular")).build()
+                .apis(RequestHandlerSelectors.basePackage("com.cliente.escola.gradecurricular.v1")).build()
                 .apiInfo(this.metaData()).tags(new Tag(CURSO, "Operações referentes a manipulação da entidade Curso."))
                 .tags(new Tag(MATERIA, "Operações referentes a manipulação da entidade Materia."));
     }

@@ -1,5 +1,6 @@
 package com.cliente.escola.gradecurricular.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,12 +15,14 @@ import java.util.List;
 @Table(name = "tb_curso")
 @Data
 @NoArgsConstructor
-public class CursoEntity implements Serializable {
+public class CursoEntity implements Serializable{
+
+    private static final long serialVersionUID = -5115709874529054925L;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @Id
-    @GeneratedValue(generator = "incrementacao") //Passa para o JPA a responsabilidade de dar um ID
-    @GenericGenerator(name = "incrementacao", strategy = "increment")
+    @GeneratedValue(generator = "incrementar")
+    @GenericGenerator(name = "incrementar", strategy = "increment")
     @Column(name = "id")
     private Long id;
 
@@ -31,7 +34,7 @@ public class CursoEntity implements Serializable {
     @Column(name = "cod")
     private String codigo;
 
-    @ManyToMany(fetch = FetchType.LAZY) // Carrregar apenas quando percisar dela
-    @JoinColumn(name = "materia_id")
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name="materia_id")
     private List<MateriaEntity> materias;
 }
